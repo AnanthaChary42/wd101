@@ -66,7 +66,6 @@ function displayEntries() {
         </tr>
   `).join("");
 }
-
 // 4) Save new entry and enforce validation rules
 function saveForm(event) {
   event.preventDefault();
@@ -111,7 +110,6 @@ function saveForm(event) {
   displayEntries();
   userForm.reset();
 }
-
 // 5) Listen for form submission and load existing entries
 userForm.addEventListener("submit", saveForm);
 displayEntries();
