@@ -1,6 +1,6 @@
 // 1) On DOM load, set min and max for the date input (18-55 age range)
 document.addEventListener("DOMContentLoaded", function () {
-    const dobInput = document.getElementById("dob");
+    const dobInput = document.getElementById("dob");  // Fixed ID
     const today = new Date();
     const minAge = 18;
     const maxAge = 55;
@@ -40,7 +40,7 @@ function displayEntries() {
             <td>${entry.name}</td>
             <td>${entry.email}</td>
             <td>${entry.password}</td>
-            <td>${entry.date}</td>
+            <td>${entry.dob}</td>
             <td>${entry.acceptTerms}</td>
           </tr>
         `;
@@ -54,8 +54,8 @@ function displayEntries() {
             <th>Name</th>
             <th>Email</th>
             <th>Password</th>
-            <th>Dob</th>
-            <th>Accepted terms?</th>
+            <th>Date of Birth</th>
+            <th>Accepted Terms?</th>
           </tr>
         </thead>
         <tbody>
@@ -67,18 +67,40 @@ function displayEntries() {
     document.getElementById("user-entries").innerHTML = table;
 }
 
-// 4) Save new entry and refresh table
+// 4) Save new entry and enforce validation rules
 function saveForm(event) {
     event.preventDefault();
 
     const name = document.getElementById("name").value;
     const email = document.getElementById("email").value;
     const password = document.getElementById("password").value;
-    const date = document.getElementById("dob").value;
+    const dob = document.getElementById("dob").value;  // Fixed ID
     const acceptTerms = document.getElementById("acceptTerms").checked;
 
+    // Email regex pattern for strict validation
+    const emailPattern = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+    if (!emailPattern.test(email)) {
+        alert("Please enter a valid email address!");
+        return;
+    }
+
+    // Age validation (18-55 years old)
+    const birthDate = new Date(dob);
+    const today = new Date();
+    const age = today.getFullYear() - birthDate.getFullYear();
+    const monthDiff = today.getMonth() - birthDate.getMonth();
+    
+    if (monthDiff < 0 || (monthDiff === 0 && today.getDate() < birthDate.getDate())) {
+        age--; // Adjust age if birthday hasn't occurred yet this year
+    }
+
+    if (age < 18 || age > 55) {
+        alert("You must be between 18 and 55 years old to register.");
+        return;
+    }
+
     // Create a new entry object
-    const entry = { name, email, password, date, acceptTerms };
+    const entry = { name, email, password, dob, acceptTerms };
 
     // Add to array and update local storage
     userEntries.push(entry);
