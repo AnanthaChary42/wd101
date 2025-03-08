@@ -1,6 +1,6 @@
 // 1) On DOM load, set min and max for the date input (18-55 age range)
 document.addEventListener("DOMContentLoaded", function () {
-    const dobInput = document.getElementById("date");
+    const dobInput = document.getElementById("dob");
     const today = new Date();
     const minAge = 18;
     const maxAge = 55;
