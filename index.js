@@ -78,7 +78,7 @@ function saveForm(event) {
     const acceptTerms = document.getElementById("acceptTerms").checked;
 
     // Email regex pattern for strict validation
-    const emailPattern = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+    const emailPattern = /^[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$/;
     if (!emailPattern.test(email)) {
         alert("Please enter a valid email address!");
         return;
