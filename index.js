@@ -67,7 +67,7 @@ function displayEntries() {
   document.getElementById("user-entries").innerHTML = table;
 }
 
-// Save form data and update table
+// Save form data and update table with validation
 function saveForm(event) {
   event.preventDefault();
 
@@ -76,6 +76,29 @@ function saveForm(event) {
   const password = document.getElementById("password").value;
   const date = document.getElementById("dob").value;
   const acceptTerms = document.getElementById("acceptTerms").checked;
+
+  // Email validation using regex
+  const emailPattern = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+  if (!emailPattern.test(email)) {
+    alert("Please enter a valid email address.");
+    return;
+  }
+
+  // Date of Birth validation (18 - 55 years old)
+  const dob = new Date(date);
+  const today = new Date();
+  let age = today.getFullYear() - dob.getFullYear();
+  const monthDiff = today.getMonth() - dob.getMonth();
+  const dayDiff = today.getDate() - dob.getDate();
+  
+  if (monthDiff < 0 || (monthDiff === 0 && dayDiff < 0)) {
+    age--; // Adjust age if birthday hasn’t occurred yet this year
+  }
+
+  if (age < 18 || age > 55) {
+    alert("Age must be between 18 and 55 years.");
+    return;
+  }
 
   const entry = { name, email, password, date, acceptTerms };
   userEntries.push(entry);
