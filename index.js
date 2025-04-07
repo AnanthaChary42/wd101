@@ -19,6 +19,21 @@ document.addEventListener("DOMContentLoaded", function () {
 
   dobInput.setAttribute("min", minDate);
   dobInput.setAttribute("max", maxDate);
+
+
+
+   const emailInput = document.getElementById("email");
+    const emailError = document.getElementById("email-error");
+
+    emailInput.addEventListener("input", () => {
+        if (emailInput.validity.typeMismatch) {
+            emailInput.setCustomValidity("Please enter a valid email address.");
+            emailError.textContent = emailInput.validationMessage;
+        } else {
+            emailInput.setCustomValidity("");
+            emailError.textContent = "";
+        }
+    });
 });
 
 // Get form and manage localStorage entries
