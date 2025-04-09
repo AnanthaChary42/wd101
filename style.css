@@ -1,122 +1,127 @@
-/* Global Reset */
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
+// Set min and max for the Date of Birth input (age range: 18-55)
+document.addEventListener("DOMContentLoaded", function () {
+  const dobInput = document.getElementById("dob");
+  const today = new Date();
+  const minAge = 18;
+  const maxAge = 55;
+
+  const minDate = new Date(
+    today.getFullYear() - maxAge,
+    today.getMonth(),
+    today.getDate()
+  ).toISOString().split("T")[0];
+
+  const maxDate = new Date(
+    today.getFullYear() - minAge,
+    today.getMonth(),
+    today.getDate()
+  ).toISOString().split("T")[0];
+
+  dobInput.setAttribute("min", minDate);
+  dobInput.setAttribute("max", maxDate);
+
+
+
+  const emailInput = document.getElementById("email");
+  const emailError = document.getElementById("email-error");
+
+  emailInput.addEventListener("input", () => {
+    if (emailInput.validity.typeMismatch) {
+      emailInput.setCustomValidity("Please enter a valid email address.");
+      emailError.textContent = emailInput.validationMessage;
+    } else {
+      emailInput.setCustomValidity("");
+      emailError.textContent = "";
+    }
+  });
+});
+
+// Get form and manage localStorage entries
+const userForm = document.getElementById("userForm");
+
+function getEntries() {
+  let stored = localStorage.getItem("user-entries");
+  return stored ? JSON.parse(stored) : [];
+}
+
+let userEntries = getEntries();
+
+// Display entries in a table
+function displayEntries() {
+  const tableRows = userEntries
+    .map(entry => {
+      return `
+        <tr>
+          <td>${entry.name}</td>
+          <td>${entry.email}</td>
+          <td>${entry.password}</td>
+          <td>${entry.date}</td>
+          <td>${entry.acceptTerms}</td>
+        </tr>
+      `;
+    })
+    .join("");
+
+  const table = `
+    <table>
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Email</th>
+          <th>Password</th>
+          <th>Dob</th>
+          <th>Accepted terms?</th>
+        </tr>
+      </thead>
+      <tbody>
+        ${tableRows}
+      </tbody>
+    </table>
+  `;
+
+  document.getElementById("user-entries").innerHTML = table;
+}
+
+// Save form data and update table with validation
+function saveForm(event) {
+  event.preventDefault();
+
+  const name = document.getElementById("name").value;
+  const email = document.getElementById("email").value;
+  const password = document.getElementById("password").value;
+  const date = document.getElementById("dob").value;
+  const acceptTerms = document.getElementById("acceptTerms").checked;
+
+  // Email validation using regex
+  const emailPattern = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+  if (!emailPattern.test(email)) {
+    alert("Please enter a valid email address.");
+    return;
   }
-  
-  /* Body: light gray background and base font */
-  body {
-    background: #f0f0f0;
-    font-family: Arial, sans-serif;
+
+  // Date of Birth validation (18 - 55 years old)
+  const dob = new Date(date);
+  const today = new Date();
+  let age = today.getFullYear() - dob.getFullYear();
+  const monthDiff = today.getMonth() - dob.getMonth();
+  const dayDiff = today.getDate() - dob.getDate();
+
+  if (monthDiff < 0 || (monthDiff === 0 && dayDiff < 0)) {
+    age--; // Adjust age if birthday hasn’t occurred yet this year
   }
-  
-  /* Main container to stack cards vertically and center them */
-  .container {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    min-height: 100vh;
-    gap: 30px;
-    width: 100%;
-    max-width: 1200px;
-    margin: 0 auto;
-    padding: 20px;
+
+  if (age < 18 || age > 55) {
+    alert("Age must be between 18 and 55 years.");
+    return;
   }
-  
-  /* Card styling for both form and table containers */
-  .form-container,
-  .table-container {
-    background: #fff;
-    width: 100%;
-    max-width: 500px;
-    border-radius: 8px;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-    padding: 20px;
-    text-align: center;
-  }
-  
-  /* Headings inside the cards */
-  .form-container h2,
-  .table-container h2 {
-    margin-bottom: 20px;
-    font-size: 1.5rem;
-  }
-  
-  /* Input group: label and input on the same line */
-  .input-group {
-    display: flex;
-    align-items: center;
-    margin-bottom: 15px;
-  }
-  
-  .input-group label {
-    min-width: 100px;
-    margin-right: 10px;
-    font-weight: 600;
-    text-align: left;
-  }
-  
-  .input-group input {
-    flex: 1;
-    padding: 10px;
-    border: 1px solid #ccc;
-    border-radius: 4px;
-  }
-  
-  /* Checkbox group styling */
-  .checkbox-group {
-    margin-bottom: 20px;
-    display: flex;
-    align-items: center;
-    justify-content: flex-start;
-  }
-  
-  .checkbox-group input[type="checkbox"] {
-    margin-right: 5px;
-  }
-  
-  /* Button container to align the submit button to the left */
-  .button-container {
-    text-align: left;
-    margin-top: 20px;
-  }
-  
-  .button-container button[type="submit"] {
-    background-color: #4CAF50;
-    color: #fff;
-    padding: 12px 20px;
-    border: none;
-    border-radius: 4px;
-    font-size: 1rem;
-    cursor: pointer;
-  }
-  
-  .button-container button[type="submit"]:hover {
-    background-color: #45a049;
-  }
-  
-  /* Table styling */
-  #user-entries table {
-    margin: 0 auto;
-    border-collapse: collapse;
-    width: 100%;
-    font-size: 0.95rem;
-  }
-  
-  #user-entries thead {
-    background-color: #f2f2f2;
-  }
-  
-  #user-entries th,
-  #user-entries td {
-    padding: 12px;
-    border-bottom: 1px solid #ddd;
-    text-align: left;
-  }
-  
-  #user-entries tr:last-child td {
-    border-bottom: none;
-  }
-  
+
+  const entry = { name, email, password, date, acceptTerms };
+  userEntries.push(entry);
+  localStorage.setItem("user-entries", JSON.stringify(userEntries));
+
+  displayEntries();
+  userForm.reset();
+}
+
+userForm.addEventListener("submit", saveForm);
+displayEntries();
