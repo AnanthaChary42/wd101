@@ -22,18 +22,18 @@ document.addEventListener("DOMContentLoaded", function () {
 
 
 
-   const emailInput = document.getElementById("email");
-    const emailError = document.getElementById("email-error");
+  const emailInput = document.getElementById("email");
+  const emailError = document.getElementById("email-error");
 
-    emailInput.addEventListener("input", () => {
-        if (emailInput.validity.typeMismatch) {
-            emailInput.setCustomValidity("Please enter a valid email address.");
-            emailError.textContent = emailInput.validationMessage;
-        } else {
-            emailInput.setCustomValidity("");
-            emailError.textContent = "";
-        }
-    });
+  emailInput.addEventListener("input", () => {
+    if (emailInput.validity.typeMismatch) {
+      emailInput.setCustomValidity("Please enter a valid email address.");
+      emailError.textContent = emailInput.validationMessage;
+    } else {
+      emailInput.setCustomValidity("");
+      emailError.textContent = "";
+    }
+  });
 });
 
 // Get form and manage localStorage entries
@@ -105,7 +105,7 @@ function saveForm(event) {
   let age = today.getFullYear() - dob.getFullYear();
   const monthDiff = today.getMonth() - dob.getMonth();
   const dayDiff = today.getDate() - dob.getDate();
-  
+
   if (monthDiff < 0 || (monthDiff === 0 && dayDiff < 0)) {
     age--; // Adjust age if birthday hasn’t occurred yet this year
   }
