@@ -24,7 +24,7 @@ document.addEventListener("DOMContentLoaded", function () {
   const emailError = document.getElementById("email-error");
 
   emailInput.addEventListener("input", () => {
-    const emailPattern = /^[a-zA-Z0-9](\.?[a-zA-Z0-9_\-+%])*@[a-zA-Z0-9\-]+(\.[a-zA-Z]{2,})+$/;
+    const emailPattern = /^[a-zA-Z0-9]+([._%+-]?[a-zA-Z0-9]+)*@[a-zA-Z0-9-]+(\.[a-zA-Z]{2,})+$/;
     if (!emailPattern.test(emailInput.value.trim())) {
       emailInput.setCustomValidity("Please enter a valid email address.");
       emailError.textContent = emailInput.validationMessage;
@@ -95,7 +95,7 @@ function saveForm(event) {
   const emailError = document.getElementById("email-error");
 
   // Updated email validation using stricter regex
-  const emailPattern = /^[a-zA-Z0-9](\.?[a-zA-Z0-9_\-+%])*@[a-zA-Z0-9\-]+(\.[a-zA-Z]{2,})+$/;
+  const emailPattern = /^[a-zA-Z0-9]+([._%+-]?[a-zA-Z0-9]+)*@[a-zA-Z0-9-]+(\.[a-zA-Z]{2,})+$/;
   if (!emailPattern.test(email)) {
     emailInput.setCustomValidity("Please enter a valid email address.");
     emailError.textContent = emailInput.validationMessage;
