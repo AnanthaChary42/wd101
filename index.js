@@ -1,39 +1,41 @@
 // Set min and max for the Date of Birth input (age range: 18-55)
 document.addEventListener("DOMContentLoaded", function () {
-  const dobInput = document.getElementById("dob");
-  const today = new Date();
-  const minAge = 18;
-  const maxAge = 55;
+    const dobInput = document.getElementById("dob");
+    const today = new Date();
+    const minAge = 18;
+    const maxAge = 55;
 
-  const minDate = new Date(
-    today.getFullYear() - maxAge,
-    today.getMonth(),
-    today.getDate()
-  ).toISOString().split("T")[0];
+    const minDate = new Date(
+      today.getFullYear() - maxAge,
+      today.getMonth(),
+      today.getDate()
+    ).toISOString().split("T")[0];
 
-  const maxDate = new Date(
-    today.getFullYear() - minAge,
-    today.getMonth(),
-    today.getDate()
-  ).toISOString().split("T")[0];
+    const maxDate = new Date(
+      today.getFullYear() - minAge,
+      today.getMonth(),
+      today.getDate()
+    ).toISOString().split("T")[0];
 
-  dobInput.setAttribute("min", minDate);
-  dobInput.setAttribute("max", maxDate);
+    dobInput.setAttribute("min", minDate);
+    dobInput.setAttribute("max", maxDate);
 
-  const emailInput = document.getElementById("email");
-  const emailError = document.getElementById("email-error");
+    const emailInput = document.getElementById("email");
+    const emailError = document.getElementById("email-error");
 
-  emailInput.addEventListener("input", () => {
-    const emailPattern = /^[a-zA-Z0-9]+([._%+-]?[a-zA-Z0-9]+)*@[a-zA-Z0-9-]+(\.[a-zA-Z]{2,})+$/;
-    if (!emailPattern.test(emailInput.value.trim())) {
-      emailInput.setCustomValidity("Please enter a valid email address.");
-      emailError.textContent = emailInput.validationMessage;
-    } else {
-      emailInput.setCustomValidity("");
-      emailError.textContent = "";
-    }
+    // Very strict email validation regex
+    const emailPattern = /^(?!.*\.\.)(?!^\.)(?!.*\.$)(?!.*-$)[a-zA-Z0-9._%+-]+@[a-zA-Z0-9-]+(?<!-)\.[a-zA-Z]{2,}$/;
+
+    emailInput.addEventListener("input", () => {
+      if (!emailPattern.test(emailInput.value)) {
+        emailInput.setCustomValidity("Please enter a valid email address.");
+        emailError.textContent = emailInput.validationMessage;
+      } else {
+        emailInput.setCustomValidity("");
+        emailError.textContent = "";
+      }
+    });
   });
-});
 
 // Get form and manage localStorage entries
 const userForm = document.getElementById("userForm");
@@ -86,7 +88,7 @@ function saveForm(event) {
   event.preventDefault();
 
   const name = document.getElementById("name").value;
-  const email = document.getElementById("email").value.trim();
+  const email = document.getElementById("email").value;
   const password = document.getElementById("password").value;
   const date = document.getElementById("dob").value;
   const acceptTerms = document.getElementById("acceptTerms").checked;
@@ -94,8 +96,8 @@ function saveForm(event) {
   const emailInput = document.getElementById("email");
   const emailError = document.getElementById("email-error");
 
-  // Updated email validation using stricter regex
-  const emailPattern = /^[a-zA-Z0-9]+([._%+-]?[a-zA-Z0-9]+)*@[a-zA-Z0-9-]+(\.[a-zA-Z]{2,})+$/;
+  // Very strict email validation using regex
+  const emailPattern = /^(?!.*\.\.)(?!^\.)(?!.*\.$)(?!.*-$)[a-zA-Z0-9._%+-]+@[a-zA-Z0-9-]+(?<!-)\.[a-zA-Z]{2,}$/;
   if (!emailPattern.test(email)) {
     emailInput.setCustomValidity("Please enter a valid email address.");
     emailError.textContent = emailInput.validationMessage;
